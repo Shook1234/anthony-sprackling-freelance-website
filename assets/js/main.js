@@ -164,8 +164,9 @@
     var rows = section.querySelectorAll(".problem-row");
     if (!rows.length) return;
 
-    // Without JS (or with reduced motion) everything stays open and stacked
-    if (reduceMotion) return;
+    // No pinning on mobile or with reduced motion: rows stay stacked and open,
+    // so the summary box below flows normally instead of overlapping.
+    if (reduceMotion || window.innerWidth < 768) return;
 
     section.classList.add("is-enhanced");
 
