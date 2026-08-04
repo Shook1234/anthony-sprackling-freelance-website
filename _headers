@@ -1,0 +1,9 @@
+# Long-cache stable assets (bust by renaming the file if one ever changes)
+/assets/fonts/*
+  Cache-Control: public, max-age=2592000, immutable
+/assets/images/*
+  Cache-Control: public, max-age=604800
+/assets/css/*
+  Cache-Control: public, max-age=86400
+/assets/js/*
+  Cache-Control: public, max-age=86400
