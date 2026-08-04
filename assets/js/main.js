@@ -85,6 +85,10 @@
 
       e.preventDefault();
       if (lenis) {
+        // Refresh Lenis's cached dimensions first — a stale height (e.g. after
+        // lazy images / the Calendly iframe load) can otherwise overshoot to
+        // the bottom of the page on mobile.
+        if (typeof lenis.resize === "function") lenis.resize();
         lenis.scrollTo(target, { offset: -80, duration: 1.3 });
       } else {
         var top =
