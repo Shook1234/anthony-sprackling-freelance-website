@@ -3107,3 +3107,41 @@ ol {
   line-height: 1.65;
   color: rgba(22, 32, 63, 0.8);
 }
+
+.req {
+  color: #b4321f;
+  text-decoration: none;
+  border: 0;
+  font-weight: 600;
+}
+
+.optin__submit[disabled] {
+  cursor: not-allowed;
+}
+
+.optin__spam {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(190, 112, 20, 0.3);
+  border-radius: 1rem;
+  background: rgba(190, 112, 20, 0.09);
+  text-align: left;
+}
+
+.optin__spam p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(22, 32, 63, 0.85);
+}
+
+.optin__spam strong {
+  color: var(--navy);
+}
+
+.optin__spam-icon {
+  flex-shrink: 0;
+  line-height: 1.6;
+}

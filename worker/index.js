@@ -108,7 +108,7 @@ async function handleLead(request, env) {
   const email = clean(data.email, 254).toLowerCase();
 
   if (!magnet) return json({ ok: false, error: "Unknown resource." }, 400);
-  if (!name || !profession || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!name || !profession || profession === "Other" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ ok: false, error: "Please fill in your name, profession and a valid email." }, 400);
   }
 

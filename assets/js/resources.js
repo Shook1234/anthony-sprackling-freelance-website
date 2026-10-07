@@ -165,25 +165,51 @@
       form.querySelector("[data-lead-invalid]").hidden = false;
     }
 
+    var otherField = form.querySelector("[data-other-field]");
+    var otherInput = form.elements.profession_other;
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var sending = false;
+
     function showError(message) {
       error.textContent = message;
       error.hidden = false;
     }
 
+    function profession() {
+      var choice = form.elements.profession.value;
+      return choice === "Other" ? otherInput.value.trim() : choice;
+    }
+
+    function isComplete() {
+      return (
+        form.elements.name.value.trim() !== "" &&
+        profession() !== "" &&
+        emailPattern.test(form.elements.email.value.trim())
+      );
+    }
+
+    // The button stays locked until every required field is filled in.
+    function update() {
+      var isOther = form.elements.profession.value === "Other";
+      otherField.hidden = !isOther;
+      otherInput.required = isOther;
+      if (!sending) button.disabled = !isComplete();
+    }
+
+    form.addEventListener("input", update);
+    form.addEventListener("change", function (e) {
+      update();
+      if (e.target === form.elements.profession && e.target.value === "Other") otherInput.focus();
+    });
+    update();
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       error.hidden = true;
-
-      var valid = true;
-      ["name", "profession", "email"].forEach(function (field) {
-        var input = form.elements[field];
-        var ok = input.value.trim() !== "" && (field !== "email" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim()));
-        input.closest(".field").classList.toggle("is-invalid", !ok);
-        if (!ok) valid = false;
-      });
-      if (!valid) return showError("Please fill in your name, profession and a valid email.");
+      if (!isComplete()) return showError("Please fill in your name, profession and a valid email.");
 
       var email = form.elements.email.value.trim();
+      sending = true;
       button.disabled = true;
       button.textContent = "Sending...";
 
@@ -193,7 +219,7 @@
         body: JSON.stringify({
           resource: form.getAttribute("data-resource"),
           name: form.elements.name.value.trim(),
-          profession: form.elements.profession.value,
+          profession: profession(),
           email: email,
           consent: form.elements.consent.checked,
           company_website: form.elements.company_website.value,
@@ -212,6 +238,7 @@
         })
         .catch(function (err) {
           showError(err.message || "Something went wrong. Please try again.");
+          sending = false;
           button.disabled = false;
           button.innerHTML = buttonHtml;
         });
