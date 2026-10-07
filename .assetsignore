@@ -1,0 +1,7 @@
+# Files that must never be served as part of the website
+.git
+.gitignore
+.assetsignore
+.DS_Store
+worker
+wrangler.jsonc

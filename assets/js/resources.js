@@ -152,8 +152,75 @@
     });
   }
 
+  /* ---------- Lead magnet opt-in form ---------- */
+  function initLeadForm() {
+    var form = document.querySelector("[data-lead-form]");
+    if (!form) return;
+    var error = form.querySelector("[data-lead-error]");
+    var button = form.querySelector('button[type="submit"]');
+    var done = document.querySelector("[data-lead-done]");
+    var buttonHtml = button.innerHTML;
+
+    if (/[?&]invalid=1/.test(window.location.search)) {
+      form.querySelector("[data-lead-invalid]").hidden = false;
+    }
+
+    function showError(message) {
+      error.textContent = message;
+      error.hidden = false;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      error.hidden = true;
+
+      var valid = true;
+      ["name", "profession", "email"].forEach(function (field) {
+        var input = form.elements[field];
+        var ok = input.value.trim() !== "" && (field !== "email" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim()));
+        input.closest(".field").classList.toggle("is-invalid", !ok);
+        if (!ok) valid = false;
+      });
+      if (!valid) return showError("Please fill in your name, profession and a valid email.");
+
+      var email = form.elements.email.value.trim();
+      button.disabled = true;
+      button.textContent = "Sending...";
+
+      fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resource: form.getAttribute("data-resource"),
+          name: form.elements.name.value.trim(),
+          profession: form.elements.profession.value,
+          email: email,
+          consent: form.elements.consent.checked,
+          company_website: form.elements.company_website.value,
+        }),
+      })
+        .then(function (res) {
+          return res.json().catch(function () {
+            return { ok: false };
+          });
+        })
+        .then(function (data) {
+          if (!data.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+          done.querySelector("[data-lead-email]").textContent = email;
+          form.hidden = true;
+          done.hidden = false;
+        })
+        .catch(function (err) {
+          showError(err.message || "Something went wrong. Please try again.");
+          button.disabled = false;
+          button.innerHTML = buttonHtml;
+        });
+    });
+  }
+
   initHubSearch();
   initHookFilters();
   initCopy();
   initToc();
+  initLeadForm();
 })();
