@@ -2392,17 +2392,27 @@ ol {
   text-transform: uppercase;
 }
 
-.hm-badge--cold {
-  background: rgba(52, 87, 213, 0.12);
+.hm-badge--unaware {
+  background: rgba(91, 124, 255, 0.12);
   color: var(--blue);
 }
 
-.hm-badge--warm {
+.hm-badge--problem {
   background: rgba(190, 112, 20, 0.14);
   color: #8a4f0b;
 }
 
-.hm-badge--retargeting {
+.hm-badge--solution {
+  background: rgba(31, 122, 84, 0.14);
+  color: #1d6447;
+}
+
+.hm-badge--product {
+  background: var(--blue);
+  color: #fff;
+}
+
+.hm-badge--most {
   background: var(--navy);
   color: var(--paper);
 }
@@ -2837,6 +2847,42 @@ ol {
 
 .hm-cta {
   margin-top: 2rem;
+}
+
+/* Awareness ladder */
+.hm-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.hm-ladder li {
+  display: grid;
+  gap: 0.35rem 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--card);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(22, 32, 63, 0.8);
+}
+
+.hm-ladder li .hm-badge {
+  justify-self: start;
+  align-self: start;
+}
+
+.hm-ladder strong {
+  color: var(--navy);
+}
+
+@media (min-width: 900px) {
+  .hm-ladder li {
+    grid-template-columns: 9.5rem 1fr 1.2fr;
+    align-items: start;
+  }
 }
 
 [hidden] {
