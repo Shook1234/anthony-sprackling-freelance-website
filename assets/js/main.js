@@ -394,6 +394,52 @@
     });
   }
 
+  /* ---------- Newsletter (Substack) ---------- */
+  function initNewsletter() {
+    var form = document.querySelector("[data-newsletter]");
+    if (!form) return;
+    var input = form.elements.email;
+    var status = form.querySelector("[data-newsletter-status]");
+    var button = form.querySelector("button");
+    var buttonHtml = button.innerHTML;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        form.classList.add("is-error");
+        status.textContent = "Please enter a valid email address.";
+        input.focus();
+        return;
+      }
+
+      form.classList.remove("is-error");
+      button.disabled = true;
+      button.textContent = "Subscribing...";
+
+      // Substack doesn't allow reading the response cross-site, so send it and confirm.
+      fetch(form.action, {
+        method: "POST",
+        mode: "no-cors",
+        body: new URLSearchParams({ email: email, source: "embed" }),
+      })
+        .then(function () {
+          form.classList.add("is-done");
+          input.value = "";
+          button.textContent = "You're subscribed";
+          status.innerHTML =
+            "Thanks! Check your inbox (and spam folder) for a welcome email from Spark. " +
+            'Nothing there? <a href="https://anthonysprackling.substack.com/" target="_blank" rel="noopener noreferrer">Subscribe on Substack &#8599;</a>';
+        })
+        .catch(function () {
+          // Network hiccup: fall back to Substack's own page.
+          button.disabled = false;
+          button.innerHTML = buttonHtml;
+          form.submit();
+        });
+    });
+  }
+
   /* ---------- Boot ---------- */
   function init() {
     initHeader();
@@ -407,6 +453,7 @@
     initCarousel();
     initFaq();
     initForm();
+    initNewsletter();
     initYear();
   }
 
