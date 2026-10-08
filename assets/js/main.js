@@ -440,6 +440,27 @@
     });
   }
 
+  /* ---------- Newsletter example ads (desktop only) ---------- */
+  function initNewsletterAds() {
+    var video = document.querySelector("[data-nl-video]");
+    if (!video || !("IntersectionObserver" in window)) return;
+    // Hidden below 960px, and stays a still poster for reduced-motion users.
+    if (!window.matchMedia("(min-width: 960px)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (!video.src) video.src = video.getAttribute("data-src");
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        } else if (video.src) {
+          video.pause();
+        }
+      });
+    }, { rootMargin: "200px 0px" }).observe(video);
+  }
+
   /* ---------- Boot ---------- */
   function init() {
     initHeader();
@@ -454,6 +475,7 @@
     initFaq();
     initForm();
     initNewsletter();
+    initNewsletterAds();
     initYear();
   }
 
