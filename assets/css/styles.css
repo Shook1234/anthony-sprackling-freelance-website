@@ -3379,10 +3379,9 @@ ol {
   width: 31%;
 }
 
-.nl-ad--square {
+.nl-ad--front {
   z-index: 1;
-  width: 38%;
-  margin-inline: -3%;
+  margin-inline: -2%;
 }
 
 .nl-ad:nth-child(1) {
