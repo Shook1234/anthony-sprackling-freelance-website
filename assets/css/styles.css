@@ -3273,3 +3273,63 @@ ol {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ---------- Book section: "work with me" list ---------- */
+.book__intro {
+  max-width: 52rem;
+}
+
+.book__kicker {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--navy);
+}
+
+.book__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.book__list li {
+  position: relative;
+  padding-left: 2.5rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(22, 32, 63, 0.85);
+}
+
+/* Tick drawn in CSS (the subset fonts don't include a check glyph) */
+.book__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.book__list li::after {
+  content: "";
+  position: absolute;
+  left: 0.52rem;
+  top: 0.42rem;
+  width: 0.38rem;
+  height: 0.7rem;
+  border: solid var(--paper);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.book__close {
+  margin-top: 1.75rem;
+  max-width: 44rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  font-weight: 600;
+  color: var(--navy);
+}
