@@ -461,6 +461,56 @@
     }, { rootMargin: "200px 0px" }).observe(video);
   }
 
+  /* ---------- Resources carousel ---------- */
+  function initResourcesCarousel() {
+    var track = document.querySelector("[data-res-track]");
+    if (!track) return;
+    var slides = track.children;
+    var controls = document.querySelector("[data-res-controls]");
+    var dotsWrap = document.querySelector("[data-res-dots]");
+    if (slides.length < 2) return; // one resource: no arrows or dots needed yet
+
+    controls.hidden = false;
+    dotsWrap.hidden = false;
+    var dots = [];
+    for (var i = 0; i < slides.length; i++) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "res-carousel__dot";
+      dot.setAttribute("aria-label", "Go to resource " + (i + 1));
+      dot.addEventListener("click", goTo.bind(null, i));
+      dotsWrap.appendChild(dot);
+      dots.push(dot);
+    }
+
+    function current() {
+      return Math.round(track.scrollLeft / track.clientWidth);
+    }
+
+    function goTo(index) {
+      var n = (index + slides.length) % slides.length;
+      track.scrollTo({ left: n * track.clientWidth, behavior: "smooth" });
+    }
+
+    function sync() {
+      var c = current();
+      dots.forEach(function (d, i) {
+        d.classList.toggle("is-active", i === c);
+      });
+    }
+
+    document.querySelector("[data-res-prev]").addEventListener("click", function () {
+      goTo(current() - 1);
+    });
+    document.querySelector("[data-res-next]").addEventListener("click", function () {
+      goTo(current() + 1);
+    });
+    track.addEventListener("scroll", function () {
+      window.requestAnimationFrame(sync);
+    });
+    sync();
+  }
+
   /* ---------- Boot ---------- */
   function init() {
     initHeader();
@@ -476,6 +526,7 @@
     initForm();
     initNewsletter();
     initNewsletterAds();
+    initResourcesCarousel();
     initYear();
   }
 
