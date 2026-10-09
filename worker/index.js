@@ -2,9 +2,8 @@
    Lead magnet gate
    --------------------------------------------------------------------------
    - POST /api/lead              -> validates the opt-in form, signs a personal
-                                    access link, then hands the lead to the
-                                    Google Apps Script (adds to CRM sheet and
-                                    emails the link).
+                                    access link, emails it via Resend and saves
+                                    the lead to the CRM sheet (Google Apps Script).
    - /resources/<magnet>         -> shows the opt-in page, or the resource
                                     itself if the visitor has a valid access
                                     link or cookie.
@@ -12,7 +11,8 @@
 
    Secrets (Cloudflare dashboard > Worker > Settings > Variables and Secrets):
    LEAD_SECRET      random string, also pasted into the Apps Script
-   APPS_SCRIPT_URL  the Apps Script web app URL
+   APPS_SCRIPT_URL  the Apps Script web app URL (saves leads to the sheet)
+   RESEND_API_KEY   Resend API key (sends the access email)
    ========================================================================== */
 
 // To gate a new lead magnet: add it here, put the opt-in page at
@@ -25,6 +25,8 @@ const MAGNETS = {
 };
 
 const SITE = "https://anthonysprackling.com";
+const EMAIL_FROM = "Anthony Sprackling <anthony@anthonysprackling.com>";
+const EMAIL_REPLY_TO = "anthonysprackling@hotmail.com";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // one year
 const NO_STORE = "private, no-store";
 
@@ -87,7 +89,7 @@ async function gate(request, env, url, slug) {
 
 /* ---------- Opt-in form ---------- */
 async function handleLead(request, env) {
-  if (!env.LEAD_SECRET || !env.APPS_SCRIPT_URL) {
+  if (!env.LEAD_SECRET || !env.RESEND_API_KEY) {
     return json({ ok: false, error: "Sign-ups aren't switched on yet. Please try again later." }, 503);
   }
 
@@ -115,31 +117,86 @@ async function handleLead(request, env) {
   const token = await signToken(env.LEAD_SECRET, slug, email);
   const link = `${SITE}/resources/${slug}?access=${token}`;
 
-  let result;
-  try {
-    const res = await fetch(env.APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        key: env.LEAD_SECRET,
-        name,
-        profession,
-        email,
-        consent: data.consent === true,
-        resource: magnet.title,
-        subject: magnet.subject,
-        link,
-      }),
-    });
-    result = await res.json();
-  } catch (e) {
-    result = { ok: false };
-  }
+  const lead = { name, profession, email, consent: data.consent === true, resource: magnet.title, link };
 
-  if (!result || !result.ok) {
+  // Send the email and save to the sheet at the same time. The email is what matters
+  // to the visitor; a sheet hiccup is logged but doesn't fail their request.
+  const [sent, saved] = await Promise.allSettled([
+    sendAccessEmail(env, lead, magnet),
+    saveToSheet(env, lead),
+  ]);
+
+  if (saved.status === "rejected") console.error("Sheet save failed:", saved.reason);
+  if (sent.status === "rejected") {
+    console.error("Email failed:", sent.reason);
     return json({ ok: false, error: "Something went wrong sending your email. Please try again." }, 502);
   }
   return json({ ok: true });
+}
+
+async function sendAccessEmail(env, lead, magnet) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: EMAIL_FROM,
+      to: [lead.email],
+      reply_to: EMAIL_REPLY_TO,
+      subject: magnet.subject,
+      html: emailHtml(lead),
+      text: emailText(lead),
+    }),
+  });
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
+}
+
+async function saveToSheet(env, lead) {
+  if (!env.APPS_SCRIPT_URL) return;
+  const res = await fetch(env.APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key: env.LEAD_SECRET, skipEmail: true, ...lead }),
+  });
+  const result = await res.json();
+  if (!result.ok) throw new Error("Apps Script: " + (result.error || "unknown error"));
+}
+
+function firstName(name) {
+  return name.replace(/^'/, "").split(" ")[0];
+}
+
+function emailText(lead) {
+  return [
+    `Hi ${firstName(lead.name)},`,
+    "",
+    `Thanks for grabbing ${lead.resource}. Here is your personal link:`,
+    "",
+    lead.link,
+    "",
+    "The link is unique to you, so bookmark it to come back any time.",
+    "",
+    "If you want a hand turning these hooks into ads for your brand, just reply to this email.",
+    "",
+    "Anthony",
+  ].join("\n");
+}
+
+function emailHtml(lead) {
+  const name = escapeHtml(firstName(lead.name));
+  const resource = escapeHtml(lead.resource);
+  return `<div style="font-family:Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#16203f;line-height:1.6">
+  <p style="font-size:16px;margin:0 0 16px">Hi ${name},</p>
+  <p style="font-size:16px;margin:0 0 24px">Thanks for grabbing <strong>${resource}</strong>. Here is your personal link:</p>
+  <p style="margin:0 0 28px"><a href="${lead.link}" style="display:inline-block;background:#0f1e46;color:#ece5d6;text-decoration:none;font-weight:600;padding:14px 28px;border-radius:999px">Open ${resource} &rarr;</a></p>
+  <p style="font-size:14px;color:#5b6274;margin:0 0 24px">The link is unique to you, so bookmark it to come back any time.</p>
+  <p style="font-size:16px;margin:0 0 16px">If you want a hand turning these hooks into ads for your brand, just reply to this email.</p>
+  <p style="font-size:16px;margin:0">Anthony</p>
+  <p style="font-size:12px;color:#5b6274;margin:32px 0 0;border-top:1px solid #e3dbc8;padding-top:16px">You are receiving this because you requested ${resource} at anthonysprackling.com.</p>
+</div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 /* ---------- Helpers ---------- */
