@@ -222,7 +222,7 @@
           profession: profession(),
           email: email,
           consent: form.elements.consent.checked,
-          company_website: form.elements.company_website.value,
+          hp_check: form.elements.hp_check.value,
         }),
       })
         .then(function (res) {

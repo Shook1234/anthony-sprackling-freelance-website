@@ -101,7 +101,7 @@ async function handleLead(request, env) {
   }
 
   // Honeypot: real people never fill this hidden field.
-  if (data.company_website) return json({ ok: true });
+  if (data.hp_check) return json({ ok: true });
 
   const slug = String(data.resource || "");
   const magnet = MAGNETS[slug];

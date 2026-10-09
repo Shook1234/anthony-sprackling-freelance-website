@@ -106,10 +106,10 @@
         <span>Email <abbr class="req" title="required">*</abbr></span>
         <input type="email" name="email" autocomplete="email" required maxlength="254" placeholder="you@company.com">
       </label>
-      <label class="field field--hp" aria-hidden="true">
-        <span>Company website</span>
-        <input type="text" name="company_website" tabindex="-1" autocomplete="off">
-      </label>
+      <div class="field field--hp" aria-hidden="true">
+        <label for="hp-check">Leave this field empty</label>
+        <input type="text" id="hp-check" name="hp_check" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore>
+      </div>
       <label class="optin__consent">
         <input type="checkbox" name="consent">
         <span>Also send me occasional creative strategy insights. Unsubscribe any time.</span>
@@ -159,6 +159,6 @@
 </footer>
 
 <script src="../assets/js/main.js?v=6"></script>
-<script src="../assets/js/resources.js?v=6"></script>
+<script src="../assets/js/resources.js?v=7"></script>
 </body>
 </html>
