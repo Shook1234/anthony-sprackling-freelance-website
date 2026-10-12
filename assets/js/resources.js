@@ -245,9 +245,106 @@
     });
   }
 
+  /* ---------- Ad Copy Matrix: cards, filters, search ---------- */
+  function initAcm() {
+    var cards = document.querySelectorAll("[data-acm-card]");
+    if (!cards.length) return;
+    var formatChips = document.querySelectorAll("[data-acm-format]");
+    var awareChips = document.querySelectorAll("[data-acm-aware]");
+    var search = document.querySelector("[data-acm-search]");
+    var count = document.querySelector("[data-acm-count]");
+    var empty = document.querySelector("[data-acm-empty]");
+    var expandBtn = document.querySelector("[data-acm-expand]");
+    var format = "all";
+    var aware = "all";
+
+    function setOpen(card, open) {
+      var head = card.querySelector(".acm-card__head");
+      head.setAttribute("aria-expanded", open ? "true" : "false");
+      card.querySelector(".acm-card__body").hidden = !open;
+      card.classList.toggle("is-open", open);
+    }
+
+    cards.forEach(function (card) {
+      card.querySelector(".acm-card__head").addEventListener("click", function () {
+        setOpen(card, !card.classList.contains("is-open"));
+      });
+    });
+
+    function apply() {
+      var q = normalise(search.value.trim());
+      var shown = 0;
+      cards.forEach(function (card) {
+        var ok =
+          (format === "all" || card.getAttribute("data-format") === format) &&
+          (aware === "all" || card.getAttribute("data-aware").split(" ").indexOf(aware) !== -1) &&
+          (!q || normalise(card.textContent).indexOf(q) !== -1);
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      document.querySelectorAll("[data-acm-group]").forEach(function (g) {
+        g.hidden = !g.querySelector("[data-acm-card]:not([hidden])");
+      });
+      document.querySelectorAll("[data-acm-section]").forEach(function (sec) {
+        sec.hidden = !sec.querySelector("[data-acm-card]:not([hidden])");
+      });
+      if (count) count.textContent = "Showing " + shown + " of " + cards.length + " frameworks";
+      if (empty) empty.hidden = shown > 0;
+    }
+
+    function chipGroup(chips, attr, setter) {
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          setter(chip.getAttribute(attr));
+          chips.forEach(function (c) { c.classList.toggle("is-active", c === chip); });
+          apply();
+        });
+      });
+    }
+    chipGroup(formatChips, "data-acm-format", function (v) { format = v; });
+    chipGroup(awareChips, "data-acm-aware", function (v) { aware = v; });
+    search.addEventListener("input", apply);
+
+    if (expandBtn) {
+      expandBtn.addEventListener("click", function () {
+        var open = expandBtn.textContent === "Expand all";
+        cards.forEach(function (c) { if (!c.hidden) setOpen(c, open); });
+        expandBtn.textContent = open ? "Collapse all" : "Expand all";
+      });
+    }
+
+    // Matrix links and #f-... URLs open the right card (clearing filters if they hide it).
+    function openFromHash(hash) {
+      var card = hash && document.getElementById(hash.replace("#", ""));
+      if (!card || !card.hasAttribute("data-acm-card")) return;
+      if (card.hidden) {
+        format = "all"; aware = "all"; search.value = "";
+        formatChips.forEach(function (c) { c.classList.toggle("is-active", c.getAttribute("data-acm-format") === "all"); });
+        awareChips.forEach(function (c) { c.classList.toggle("is-active", c.getAttribute("data-acm-aware") === "all"); });
+        apply();
+      }
+      setOpen(card, true);
+      setTimeout(function () {
+        var top = card.getBoundingClientRect().top + window.scrollY - 170;
+        window.scrollTo({ top: top, behavior: "smooth" });
+      }, 30);
+    }
+    document.querySelectorAll("[data-acm-open]").forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        history.replaceState(null, "", a.getAttribute("href"));
+        openFromHash(a.getAttribute("href"));
+      });
+    });
+    if (location.hash) openFromHash(location.hash);
+
+    apply();
+  }
+
   initHubSearch();
   initHookFilters();
   initCopy();
   initToc();
   initLeadForm();
+  initAcm();
 })();

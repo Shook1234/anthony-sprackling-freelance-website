@@ -23,6 +23,11 @@ const MAGNETS = {
     subject: "Your Hook Matrix is here",
     pitch: "If you want a hand turning these hooks into ads for your brand, just reply to this email.",
   },
+  "ad-copy-matrix": {
+    title: "The Ad Copy Matrix",
+    subject: "Your Ad Copy Matrix is here",
+    pitch: "If you want a hand turning these frameworks into ads for your brand, just reply to this email.",
+  },
   "profitability-calculator": {
     title: "The Meta Profitability Calculator",
     subject: "Your Meta Profitability Calculator is here",
