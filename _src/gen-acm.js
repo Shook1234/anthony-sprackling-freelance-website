@@ -202,7 +202,7 @@ ${list.map(videoCard).join("\n")}
   const page =
     head(
       `${total} copy and script frameworks for DTC ads on Meta: copy formulas, video script structures and static formats, tagged by awareness level with worked examples.`,
-      `The Ad Copy Matrix: ${total} copy & script frameworks for DTC ads on Meta`
+      `The Ad Copy Matrix: ${total} frameworks for D2C ads on Meta`
     ) +
     header +
     `
@@ -214,11 +214,11 @@ ${list.map(videoCard).join("\n")}
     <span class="res-icon" aria-hidden="true">&#x1F9E9;</span>
     <span>Copy framework library &middot; 15 min read</span>
   </div>
-  <h1 class="display res-title">The Ad Copy Matrix: ${total} copy &amp; script frameworks for DTC ads on Meta</h1>
+  <h1 class="display res-title">The Ad Copy Matrix: ${total} frameworks for D2C ads on Meta</h1>
   <p class="section-lead" style="max-width:46rem">
     Script structures that will help you turn attention into sales. Every framework is broken
-    into beats, tagged by format and level of awareness, with why each beat works and worked
-    examples you can brief from today.
+    down, tagged by format and level of awareness, with descriptions of why they work and
+    examples you can brief from.
   </p>
 </header>
 
@@ -234,7 +234,6 @@ ${toc.map(([id, label]) => `      <a href="#${id}">${esc(label)}</a>`).join("\n"
 
     <section class="hm-section hm-section--first" id="why-copy">
       <h2>Why copy matters now</h2>
-      <p class="hm-sub">The hook stops the scroll. The body does the selling.</p>
       <div class="hm-prose">
         <p>Copy used to be how you persuaded someone to buy. Now it's also how you tell Meta who the ad is for. With broad targeting, the algorithm reads your creative to decide who to show it to, so clear, specific messaging means better delivery and more stable performance.</p>
         <p>That's why the framework comes third, not first. Every strong ad is built in the same order:</p>
