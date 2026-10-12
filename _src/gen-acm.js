@@ -202,7 +202,7 @@ ${list.map(videoCard).join("\n")}
   const page =
     head(
       `${total} copy and script frameworks for DTC ads on Meta: copy formulas, video script structures and static formats, tagged by awareness level with worked examples.`,
-      `The Ad Copy Matrix: ${total} frameworks for D2C ads on Meta`
+      `The Ad Copy Matrix: ${total} ad frameworks for DTC brands on Meta`
     ) +
     header +
     `
@@ -214,7 +214,7 @@ ${list.map(videoCard).join("\n")}
     <span class="res-icon" aria-hidden="true">&#x1F9E9;</span>
     <span>Copy framework library &middot; 15 min read</span>
   </div>
-  <h1 class="display res-title">The Ad Copy Matrix: ${total} frameworks for D2C ads on Meta</h1>
+  <h1 class="display res-title">The Ad Copy Matrix: ${total} ad frameworks for DTC brands on Meta</h1>
   <p class="section-lead" style="max-width:46rem">
     Script structures that will help you turn attention into sales. Every framework is broken
     down, tagged by format and level of awareness, with descriptions of why they work and

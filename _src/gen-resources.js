@@ -486,11 +486,11 @@ fs.writeFileSync(
     slug: "ad-copy-matrix",
     name: "the Ad Copy Matrix",
     description: `Get the free Ad Copy Matrix: ${acm.total} copy and script frameworks for DTC ads on Meta, tagged by format and level of awareness.`,
-    ogTitle: `The Ad Copy Matrix: ${acm.total} frameworks for D2C ads on Meta`,
+    ogTitle: `The Ad Copy Matrix: ${acm.total} ad frameworks for DTC brands on Meta`,
     icon: "&#x1F9E9;",
     label: "Free framework library",
     title: "The Ad Copy Matrix",
-    kicker: `${acm.total} frameworks for D2C ads on Meta`,
+    kicker: `${acm.total} ad frameworks for DTC brands on Meta`,
     lead: "Script structures that will help you turn attention into sales. Every framework is broken down, tagged by format and level of awareness, with descriptions of why they work and examples you can brief from.",
     bullets: [
       `<strong>${acm.copy} copy formulas</strong> that work as video scripts, static copy and primary text`,
@@ -582,7 +582,7 @@ const hub =
     <a class="res-feature reveal" href="ad-copy-matrix.html" data-res-item data-keywords="copy copywriting scripts script frameworks aida pas bab fab pastor video static primary text ugc awareness">
       <div class="res-feature__copy">
         <p class="eyebrow res-feature__eyebrow">New &middot; Framework library</p>
-        <h3>The Ad Copy Matrix: ${acm.total} frameworks for D2C ads on Meta</h3>
+        <h3>The Ad Copy Matrix: ${acm.total} ad frameworks for DTC brands on Meta</h3>
         <p>Script structures that will help you turn attention into sales. Copy formulas, video scripts and static formats, tagged by awareness level with worked examples.</p>
         <span class="btn btn--light">Get the free matrix <span class="arrow">&rarr;</span></span>
       </div>
