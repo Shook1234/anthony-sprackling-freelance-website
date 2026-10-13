@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><style>:root{--w:1080px;--h:1350px}
+@font-face{font-family:Fraunces;font-weight:600;src:url('file:///Users/AnthonysMacBook/anthony-sprackling-website/assets/fonts/fraunces-600.woff2')}
+@font-face{font-family:Fraunces;font-style:italic;font-weight:500;src:url('file:///Users/AnthonysMacBook/anthony-sprackling-website/assets/fonts/fraunces-italic-500.woff2')}
+@font-face{font-family:Inter;font-weight:400;src:url('file:///Users/AnthonysMacBook/anthony-sprackling-website/assets/fonts/inter-400.woff2')}
+@font-face{font-family:Inter;font-weight:500;src:url('file:///Users/AnthonysMacBook/anthony-sprackling-website/assets/fonts/inter-500.woff2')}
+@font-face{font-family:Inter;font-weight:600;src:url('file:///Users/AnthonysMacBook/anthony-sprackling-website/assets/fonts/inter-600.woff2')}
+*{box-sizing:border-box;margin:0}
+body{width:var(--w);height:var(--h);background:#ece5d6;color:#16203f;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.brand{font-family:Fraunces;font-weight:600;color:#0f1e46;letter-spacing:-.01em}
+.brand span{color:#5b7cff}
+.eyebrow{font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:#3457d5}
+.meta{display:flex;align-items:center;gap:22px}
+.tile{display:grid;place-items:center;border:1px solid rgba(15,30,70,.14);background:#f6f2e8;font-family:"Apple Color Emoji"}
+h1{font-family:Fraunces;font-weight:600;color:#0f1e46;line-height:.98;letter-spacing:-.015em}
+.sub{font-family:Fraunces;font-style:italic;font-weight:500;color:#3457d5;line-height:1.2}
+.card{background:#0f1e46;color:#ece5d6;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;right:-180px;top:-200px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(91,124,255,.35),transparent 65%)}
+.stat .lab{font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:#8ba3ff}
+.stat .num{font-family:Fraunces;font-weight:600;line-height:1;color:#ece5d6}
+.stat .num small{font-family:Inter;font-weight:500;color:rgba(236,229,214,.65);letter-spacing:0}
+.stat + .stat{border-top:1px solid rgba(236,229,214,.15)}
+.foot{display:flex;justify-content:space-between;align-items:center;font-weight:500;color:rgba(22,32,63,.7)}
+.pill{border-radius:999px;background:#0f1e46;color:#ece5d6;font-weight:600}
+
+body{padding:84px 88px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center}
+.top .brand{font-size:34px}
+.top .pill{font-size:20px;padding:12px 24px;letter-spacing:.14em;text-transform:uppercase}
+.meta{margin-top:64px}
+.tile{width:92px;height:92px;border-radius:24px;font-size:52px}
+.meta .eyebrow{font-size:22px}
+h1{margin-top:30px;font-size:106px}
+.sub{margin-top:30px;margin-bottom:48px;font-size:44px;max-width:860px}
+.card{margin-top:auto;flex-shrink:0;border-radius:40px;padding:52px 56px;display:grid;grid-template-columns:270px 1fr;gap:52px;align-items:center}
+.stat{position:relative;padding:22px 0}
+.stat .lab{font-size:18px}
+.stat .num{margin-top:12px;font-size:58px}
+.stat .num small{font-size:22px;margin-left:6px}
+.foot{margin-top:44px;font-size:24px}
+</style></head><body>
+<div class="top"><div class="brand">Anthony<span>.</span>Sprackling</div></div>
+<div class="meta"><div class="tile">&#x1F4B7;</div><div class="eyebrow">Free calculator</div></div>
+<h1>The Meta Profitability Calculator</h1>
+<p class="sub">Find the exact CPA and ROAS you need to make money on Meta.</p>
+<div class="card"><svg width="270" height="270" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(236,229,214,.12)" stroke-width="13"/><circle cx="50" cy="50" r="38" fill="none" stroke="#b8b0a0" stroke-width="13" stroke-dasharray="39.79 198.97" stroke-dashoffset="0.00" transform="rotate(-90 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#e0a458" stroke-width="13" stroke-dasharray="47.75 191.01" stroke-dashoffset="-39.79" transform="rotate(-90 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#8ba3ff" stroke-width="13" stroke-dasharray="4.78 233.99" stroke-dashoffset="-87.55" transform="rotate(-90 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#d9776a" stroke-width="13" stroke-dasharray="5.97 232.79" stroke-dashoffset="-92.32" transform="rotate(-90 50 50)"/><circle cx="50" cy="50" r="38" fill="none" stroke="#5b7cff" stroke-width="13" stroke-dasharray="140.47 98.29" stroke-dashoffset="-98.29" transform="rotate(-90 50 50)"/><text x="50" y="50" text-anchor="middle" font-family="Fraunces" font-weight="600" font-size="15" fill="#ece5d6">&#163;60</text><text x="50" y="61" text-anchor="middle" font-family="Inter" font-weight="500" font-size="6" fill="rgba(236,229,214,.65)">order value</text></svg>
+  <div>
+    <div class="stat"><div class="lab">Break-even</div><div class="num">&#163;27.91<small>CPA</small> &nbsp;2.15<small>ROAS</small></div></div>
+    <div class="stat"><div class="lab">Your target at 15% profit</div><div class="num">&#163;22.15<small>CPA</small> &nbsp;2.71<small>ROAS</small></div></div>
+  </div>
+</div>
+<div class="foot"><span>After every cost, including creative.</span><span class="brand" style="font-size:24px">anthonysprackling.com</span></div>
+</body></html>

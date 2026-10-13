@@ -10,7 +10,7 @@ const esc = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const pad = (n) => String(n).padStart(2, "0");
 
-const head = (desc, ogTitle) => `<!DOCTYPE html>
+const head = (desc, ogTitle, ogImage) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -19,7 +19,11 @@ const head = (desc, ogTitle) => `<!DOCTYPE html>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${esc(ogTitle)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="website">${ogImage ? `
+<meta property="og:image" content="https://anthonysprackling.com/assets/images/og/${ogImage}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">` : ""}
 <link rel="icon" type="image/png" href="../assets/images/favicon.png">
 <link rel="stylesheet" href="../assets/css/styles.css?v=12">
 </head>
@@ -388,7 +392,7 @@ fs.writeFileSync(path.join(OUT, "_gated", "hook-matrix.html"), gated);
 /* ============================== OPT-IN PAGES ============================== */
 // Every email-gated resource gets the same sign-up page; only the copy changes.
 function optinPage(c) {
-  return head(c.description, c.ogTitle) +
+  return head(c.description, c.ogTitle, c.ogImage) +
   header +
   `
 <main>
@@ -531,6 +535,7 @@ fs.writeFileSync(
   optinPage({
     slug: "profitability-calculator",
     name: "the calculator",
+    ogImage: "profitability-calculator.png",
     description: "Get the free Meta Profitability Calculator: find the exact CPA and ROAS you need to make money on Meta, after every cost, including creative.",
     ogTitle: "The Meta Profitability Calculator",
     icon: "&#x1F4B7;",
