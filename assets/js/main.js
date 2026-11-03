@@ -353,6 +353,14 @@
       e.preventDefault();
       var endpoint = form.getAttribute("action");
       if (status) status.textContent = "";
+
+      // The browser blocks empty required fields; this also catches a message of just spaces.
+      var message = form.elements.message;
+      if (message && !message.value.trim()) {
+        if (status) status.textContent = "Please add a message so I know how I can help.";
+        message.focus();
+        return;
+      }
       if (button) {
         button.disabled = true;
         button.textContent = "Sending…";
